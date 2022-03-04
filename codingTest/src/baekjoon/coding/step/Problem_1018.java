@@ -4,9 +4,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 public class Problem_1018 {
-	
 	private static boolean chess[][];
-	private static int minNum = Integer.MAX_VALUE;
+	private static int minNum = 32;
 	
 	public static void paint(int x, int y){
 		int pCnt = 0;
@@ -22,6 +21,7 @@ public class Problem_1018 {
 			tile = !tile;
 		}
 		
+		// 위에서 구한 색칠한 수와 B, W를 반대로 색칠했을 때의 수(체스판 총 개수 - 색칠한 수)를 비교하여 최소값을 구함
 		pCnt = Math.min(pCnt, 64 - pCnt);
 		
 		minNum = Math.min(minNum, pCnt);
@@ -31,10 +31,10 @@ public class Problem_1018 {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
 		try {
-			String a1[] = br.readLine().split(" ");
+			String size[] = br.readLine().split(" ");
 			
-			int row = Integer.parseInt(a1[0]);
-			int col = Integer.parseInt(a1[1]);
+			int row = Integer.parseInt(size[0]);
+			int col = Integer.parseInt(size[1]);
 			
 			chess = new boolean[row][col];
 			
