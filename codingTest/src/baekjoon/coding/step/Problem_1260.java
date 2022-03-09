@@ -1,78 +1,85 @@
 package baekjoon.coding.step;
 
-import java.util.Comparator;
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
 
 public class Problem_1260 {
 	
-	public class BinTree<K, V> {
-		class Node<K, V> {
-			private K key; // 키 값
-			private V data; // 데이터
-			private Node<K, V> left; //왼쪽 자식 노드
-			private Node<K, V> right; // 오른쪽 자식 노드
-			
-			Node(K key, V data, Node<K, V> left, Node<K, V> right){
-				this.key = key;
-				this.data = data;
-				this.left = left;
-				this.right = right;
-			}
-			
-			K getKey(){
-				return key;
-			}
-			
-			V getValue() {
-				return data;
-			}
-			
-			void print(){
-				System.out.println(data);
+	public static void dfs(int[][] node, boolean[] chk, int idx, StringBuilder sb) {
+		if (chk[idx]) return;
+		
+		sb.append(idx).append(" ");
+		
+		for (int i = 1; i < node.length; i++) {
+			if (i != idx && node[idx][i] == 1) {
+				chk[idx] = true;
+				dfs(node, chk, i, sb);
 			}
 		}
+	}
+	
+	public static void bfs(int[][] node, boolean[] chk, int idx, StringBuilder sb) {
+		Queue<Integer> queue = new LinkedList<Integer>();
+		queue.add(idx);
 		
-		private Node<K, V> root;
-		private Comparator<? super K> comparator = null;
-		
-		public BinTree() {
-			root = null;
-		}
-		
-		public BinTree(Comparator<? super K> c) {
-			this();
-			comparator = c;
-		}
-		
-		private int comp(K key1, K key2) {
-			return (comparator == null) ? ((Comparable<K>)key1).compareTo(key2)
-										: comparator.compare(key1, key2);
-		}
-		
-		public V search(K key) {
-			Node<K, V> p = root;
+		while (!queue.isEmpty()) {
+			int q = queue.poll();
 			
-			while (true) {
-				if (p == null) {
-					return null;
-				}
-				
-				int cond = comp(key, p.getKey());
-				
-				if (cond == 0) {
-					return p.getValue();
-				} else if (cond < 0) {
-					p = p.left;
-				} else {
-					p = p.right;
+			if (chk[q]) continue; // break 사용 시 탐색이 중단되는 경우가 있어서 continue 사용함
+			
+			sb.append(q).append(" ");
+			chk[q] = true;
+			
+			for (int i = 1; i < node.length; i++) {
+				if (i != q && node[q][i] == 1) {
+					queue.add(i);
 				}
 			}
 		}
 	}
 
 	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in); 
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
+		try {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			
+			int n = Integer.parseInt(st.nextToken()) + 1; // 직관적으로 위치를 표시하기 위해 +1 함
+			int m = Integer.parseInt(st.nextToken());
+			int v = Integer.parseInt(st.nextToken());
+			
+			boolean[] chk = new boolean[n];
+			int[][] node = new int[n][n];
+			
+			for (int i = 0; i < m; i++) {
+				st = new StringTokenizer(br.readLine());
+				
+				int row = Integer.parseInt(st.nextToken());
+				int col = Integer.parseInt(st.nextToken());
+				
+				node[row][col] = 1;
+				node[col][row] = 1;
+			}
+			
+			StringBuilder dfsSb = new StringBuilder();
+			StringBuilder bfsSb = new StringBuilder();
+			
+			dfs(node, chk, v, dfsSb);
+			
+			Arrays.fill(chk, false); // 체크용 boolean 배열 다시 false로 초기화
+			
+			bfs(node, chk, v, bfsSb);
+			
+			System.out.println(dfsSb.toString().trim());
+			
+			System.out.println(bfsSb.toString().trim());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }
