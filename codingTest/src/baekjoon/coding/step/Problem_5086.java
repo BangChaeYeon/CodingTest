@@ -10,7 +10,7 @@ public class Problem_5086 {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
 		try {
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			StringTokenizer st = null;
 			
 			while (true) {
